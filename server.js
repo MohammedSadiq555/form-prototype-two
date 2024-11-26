@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-console.log('MONGODB_URI:', process.env.MONGODB_URI); // Add this line to log the URI
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -11,14 +11,18 @@ const port = process.env.PORT || 3019;
 const app = express();
 app.use(express.static(__dirname));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json()); // Parse JSON bodies
 
-// MongoDB connection with error handling
+// Log start time
+console.time('Server startup');
+
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
     console.log("MongoDB connection Successful");
+    // Log successful connection time
+    console.timeEnd('Server startup');
 }).catch(err => {
     console.error("MongoDB connection error:", err);
 });
@@ -46,6 +50,7 @@ app.post('/post', upload.single('image'), async (req, res) => {
     const { text } = req.body;
     const image = req.file.buffer;
 
+    console.time('Save to MongoDB'); // Log start of save operation
     const user = new Users({
         text,
         image,
@@ -55,6 +60,7 @@ app.post('/post', upload.single('image'), async (req, res) => {
         await user.save();
         console.log(user);
         res.send("Form Submission Successful");
+        console.timeEnd('Save to MongoDB'); // Log end of save operation
     } catch (error) {
         console.error("Error saving data to MongoDB:", error);
         res.status(500).send("Internal Server Error");
