@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Form</title>
+</head>
+<body>
+    <h1>Upload Text and Image</h1>
+    <form id="uploadForm" enctype="multipart/form-data" action="/post" method="post">
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" required>
+        <br><br>
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Uploaded Items</h2>
+    <div id="items">
+        <!-- Uploaded items will be displayed here -->
+    </div>
+</body>
+</html>
